@@ -161,7 +161,7 @@ Intelligent-UI-Helper/
 
 ## 👤 Author / 作者
 
-**CHUNHAO031**
+**CHUNHAO031**  QIANRU LI&CHUNHAO ZHOU
 
 - GitHub: [CHUNHAO031](https://github.com/CHUNHAO031)
 - Related repo · 相关仓库: [Intelligent-UI-Helper-0325](https://github.com/CHUNHAO031/Intelligent-UI-Helper-0325)
