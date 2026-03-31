@@ -152,6 +152,28 @@
     }
     .cover-authors span { color: #FFF; display: inline-block; margin-top: 0.5vh; }
 
+    .youtube-block {
+      margin-top: 2vh;
+      max-width: 90%;
+      text-align: center;
+      font-size: clamp(0.65rem, 0.95vw, 0.9rem);
+      line-height: 1.55;
+      color: rgba(224, 242, 255, 0.88);
+      pointer-events: auto;
+      z-index: 2;
+      position: relative;
+    }
+    .youtube-block p { margin: 0.5vh 0; }
+    .youtube-block a {
+      color: var(--cyan);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0, 163, 255, 0.45);
+      pointer-events: auto;
+    }
+    .youtube-block a:hover { color: var(--orange); border-color: var(--orange); }
+    .youtube-block code { font-size: 0.82em; padding: 0.1em 0.25em; }
+    .youtube-block a code { color: inherit; border-bottom: none; }
+
     /* Abstract Tech Icon (Bottom Right Cover) */
     .abstract-icon {
       position: absolute;
@@ -346,6 +368,10 @@
         DEVELOPED BY / 架构开发者<br>
         <span>李芊儒 QIANRU LI (MC569160)</span><br>
         <span>周纯昊 CHUNHAO ZHOU (MC569263)</span>
+      </div>
+      <div class="youtube-block">
+        <p><strong>EN</strong> · For more details, see the YouTube link: <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer">YouTube demo</a> (i.e. <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer"><code>https://www.youtube.com/watch?v=bloI8D-9ATs</code></a>).</p>
+        <p><strong>中文</strong> · 详情请参阅 YouTube 链接，链接指向 <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer">YouTube 演示</a>（即 <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer"><code>https://www.youtube.com/watch?v=bloI8D-9ATs</code></a>）。</p>
       </div>
     </div>
 
@@ -676,8 +702,12 @@ Intelligent-UI-Helper/
         <span style="color: #FFF; font-size: 1.5vw; font-weight: 600;">李芊儒 QIANRU LI (MC569160)</span><br>
         <span style="color: #FFF; font-size: 1.5vw; font-weight: 600;">周纯昊 CHUNHAO ZHOU (MC569263)</span>
       </div>
+      <div class="youtube-block">
+        <p><strong>EN</strong> · For more details, see the YouTube link: <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer">YouTube demo</a> (i.e. <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer"><code>https://www.youtube.com/watch?v=bloI8D-9ATs</code></a>).</p>
+        <p><strong>中文</strong> · 详情请参阅 YouTube 链接，链接指向 <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer">YouTube 演示</a>（即 <a href="https://www.youtube.com/watch?v=bloI8D-9ATs" target="_blank" rel="noopener noreferrer"><code>https://www.youtube.com/watch?v=bloI8D-9ATs</code></a>）。</p>
+      </div>
       
-      <p style="margin-top: 4vh; color: #888; font-family: var(--font-title); font-size: 1vw; letter-spacing: 0.2em;">HAPPY DESIGNING &middot; 设计愉快 🎨</p>
+      <p style="margin-top: 2vh; color: #888; font-family: var(--font-title); font-size: 1vw; letter-spacing: 0.2em;">HAPPY DESIGNING &middot; 设计愉快 🎨</p>
     </div>
 
     <!-- UI Overlays -->
@@ -718,6 +748,7 @@ Intelligent-UI-Helper/
     });
 
     document.getElementById('deck').addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
       const rect = e.currentTarget.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       if (clickX > rect.width / 2) next();
