@@ -27,7 +27,8 @@ jobs:
       - name: Build static site artifact
         run: |
           mkdir -p _site
-          cp presentation-deck.html _site/index.html
+          cp pages/index.html _site/index.html
+          cp presentation-deck.html _site/presentation-deck.html
           touch _site/.nojekyll
 
       - name: Configure Pages
