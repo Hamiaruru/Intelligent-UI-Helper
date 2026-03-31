@@ -207,7 +207,7 @@ Intelligent-UI-Helper/
 - **中文** · 详情请参阅 YouTube 链接，链接指向 [YouTube 演示](https://www.youtube.com/watch?v=bloI8D-9ATs)（即 [https://www.youtube.com/watch?v=bloI8D-9ATs](https://www.youtube.com/watch?v=bloI8D-9ATs)）。
 
 - GitHub: [CHUNHAO031](https://github.com/CHUNHAO031)
-- Related repo · 相关仓库: [Intelligent-UI-Helper-0325](https://github.com/CHUNHAO031/Intelligent-UI-Helper-0325)
+- Related repo · 相关仓库: [Intelligent-UI-Helper](https://github.com/Hamiaruru/Intelligent-UI-Helper)
 
 ---
 
