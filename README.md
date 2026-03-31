@@ -2,10 +2,11 @@
 
 <p align="center">
   <a href="https://hamiaruru.github.io/Intelligent-UI-Helper/">
-    <img src="https://img.shields.io/badge/Live%20Demo-Open%20Site-00C2FF?style=for-the-badge&logo=githubpages&logoColor=white" alt="Live Demo - Open Site" />
+    <img src="https://raw.githubusercontent.com/Hamiaruru/Intelligent-UI-Helper/main/pages/badges/live-demo.svg" alt="Live Demo" />
   </a>
+  &nbsp;
   <a href="https://hamiaruru.github.io/Intelligent-UI-Helper/presentation-deck.html">
-    <img src="https://img.shields.io/badge/Presentation%20Deck-View%20Slides-FF7A45?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Presentation Deck - View Slides" />
+    <img src="https://raw.githubusercontent.com/Hamiaruru/Intelligent-UI-Helper/main/pages/badges/presentation-deck.svg" alt="Presentation Deck" />
   </a>
 </p>
 
