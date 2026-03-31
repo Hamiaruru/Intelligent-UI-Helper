@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Intelligent UI Helper — Cyberpunk Tech Presentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* Neon Cyberpunk Theme */
+    :root {
+      --bg-cover: #0A0A0A;
+      --bg-content: #001122; /* Very dark blue for depth */
+      --cyan: #00A3FF;
+      --orange: #FF6200;
+      --text-main: #E0F2FF;
+      --font-title: 'Orbitron', sans-serif;
+      --font-heading: 'Rajdhani', sans-serif;
+      --font-body: 'Inter', "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-body);
+      background: #000;
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Deck Container - 16:9 Aspect Ratio */
+    .deck-container {
+      width: 100vw;
+      height: 56.25vw;
+      max-height: 100vh;
+      max-width: 177.78vh;
+      position: relative;
+      background: var(--bg-content);
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 163, 255, 0.2);
+    }
+
+    /* Background Effects - Grid & Particles */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 163, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 163, 255, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 0;
+      pointer-events: none;
+      perspective: 1000px;
+    }
+    .grid-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 20%, var(--bg-content) 100%);
+    }
+    
+    .circuit-lines {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 15% 85%, rgba(255, 98, 0, 0.1) 0%, transparent 30%),
+        radial-gradient(circle at 85% 15%, rgba(0, 163, 255, 0.15) 0%, transparent 40%);
+      z-index: 0;
+    }
+
+    /* Slides */
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: 6vw 8vw;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    /* Cover Slide Specifics */
+    .slide.cover {
+      background: var(--bg-cover);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .slide.cover .grid-bg::after {
+      background: radial-gradient(circle at 50% 50%, transparent 10%, var(--bg-cover) 100%);
+    }
+
+    .cover-title {
+      font-family: var(--font-title);
+      font-size: 5.5vw;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin-bottom: 2vh;
+      
+      /* 3D Glowing Gradient Text */
+      background: linear-gradient(135deg, var(--cyan) 0%, #A052FF 50%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 15px rgba(0, 163, 255, 0.5)) drop-shadow(0 0 30px rgba(255, 98, 0, 0.3));
+    }
+    
+    .cover-subtitle {
+      font-family: var(--font-heading);
+      font-size: 2vw;
+      font-weight: 500;
+      color: #FFFFFF;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5vh;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    .cover-zh {
+      font-size: 1.2vw;
+      color: var(--cyan);
+      letter-spacing: 0.2em;
+      margin-bottom: 8vh;
+      font-weight: 300;
+      text-shadow: 0 0 8px rgba(0,163,255,0.4);
+    }
+
+    .cover-authors {
+      font-family: var(--font-heading);
+      font-size: 1.2vw;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      background: rgba(0, 163, 255, 0.05);
+      border: 1px solid rgba(0, 163, 255, 0.2);
+      padding: 1.5vw 3vw;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 20px rgba(0,163,255,0.05), 0 0 15px rgba(0,0,0,0.5);
+    }
+    .cover-authors span { color: #FFF; display: inline-block; margin-top: 0.5vh; }
+
+    /* Abstract Tech Icon (Bottom Right Cover) */
+    .abstract-icon {
+      position: absolute;
+      bottom: -5vw;
+      right: -5vw;
+      width: 30vw;
+      height: 30vw;
+      background: radial-gradient(circle, rgba(255,98,0,0.15) 0%, transparent 60%);
+      border-radius: 50%;
+      border: 1px dashed rgba(255,98,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: spin 30s linear infinite;
+    }
+    .abstract-icon::before {
+      content: '';
+      width: 20vw; height: 20vw;
+      border-radius: 50%;
+      border: 2px solid rgba(0,163,255,0.2);
+      border-top-color: var(--cyan);
+      border-bottom-color: var(--orange);
+      animation: spin 15s linear infinite reverse;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    /* Content Slide Typography */
+    .slide-header {
+      margin-bottom: 3vh;
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5vw;
+    }
+    .slide-header h2 {
+      font-family: var(--font-title);
+      font-size: 2.5vw;
+      color: #FFFFFF;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 15px var(--cyan), 0 0 30px rgba(0, 163, 255, 0.5);
+      margin: 0;
+    }
+    .slide-header .zh-title {
+      font-size: 1.5vw;
+      color: var(--cyan);
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4vw;
+      text-shadow: 0 0 10px rgba(0,163,255,0.4);
+    }
+    .header-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      margin-bottom: 0.8vw;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: rgba(10, 20, 40, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 163, 255, 0.15);
+      border-left: 4px solid var(--orange);
+      border-radius: 4px;
+      padding: 1.5vw 2vw;
+      margin-bottom: 1.5vh;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-card::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+      transform: skewX(-20deg); transition: 0.5s;
+    }
+    .glass-card:hover::before { left: 200%; }
+    
+    .glass-card h3 {
+      font-family: var(--font-heading);
+      color: var(--cyan);
+      font-size: 1.6vw;
+      margin-bottom: 1vh;
+      display: flex; align-items: center; gap: 1vw;
+    }
+    .glass-card h3 .zh { font-size: 1vw; color: #A0D8FF; font-weight: 400; margin-left: 0.5vw; }
+    
+    /* Layouts */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      font-size: 1.1vw;
+      line-height: 1.4;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2vw;
+      height: 100%;
+    }
+    .grid-2.uneven { grid-template-columns: 1.2fr 0.8fr; }
+
+    /* Lists & Dual Language Text */
+    ul { list-style: none; margin-left: 0; }
+    li {
+      margin-bottom: 1.2vh;
+      padding-left: 1.5vw;
+      position: relative;
+    }
+    li::before {
+      content: '■';
+      position: absolute;
+      left: 0; top: 0;
+      color: var(--orange);
+      font-size: 0.8em;
+      text-shadow: 0 0 8px var(--orange);
+    }
+    .en-text { display: block; color: var(--text-main); }
+    .zh-text { display: block; font-size: 0.85em; color: #7F9FB8; margin-top: 0.2vh; font-weight: 300; }
+
+    /* Orange Icons & Highlights */
+    .icon { color: var(--orange); width: 1.5vw; height: 1.5vw; fill: currentColor; filter: drop-shadow(0 0 5px var(--orange)); }
+    .highlight { color: #FFF; font-weight: 600; text-shadow: 0 0 8px rgba(255,255,255,0.4); }
+
+    /* Tables / Data */
+    table {
+      width: 100%; border-collapse: collapse; margin-top: 1vh;
+      font-family: var(--font-heading); font-size: 1vw;
+    }
+    th {
+      text-align: left; padding: 0.8vw; color: var(--cyan);
+      border-bottom: 1px solid rgba(0,163,255,0.3);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    td { padding: 0.8vw; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+    tr:last-child td { border-bottom: none; }
+
+    /* Code Blocks */
+    pre, code {
+      font-family: 'Courier New', Courier, monospace;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,163,255,0.2);
+      border-radius: 4px;
+      color: #A5D6FF;
+    }
+    pre { padding: 1.2vw; overflow-x: auto; font-size: 0.9vw; margin: 1vh 0; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); }
+    code { padding: 0.2vw 0.4vw; font-size: 0.9em; }
+
+    /* Bottom Progress Bar & Footer */
+    .footer-bar {
+      position: absolute; bottom: 0; left: 0; width: 100%;
+      height: 3px; background: rgba(255,255,255,0.1);
+      z-index: 10;
+    }
+    .progress-fill {
+      height: 100%; width: 0%;
+      background: var(--orange);
+      box-shadow: 0 0 10px var(--orange), 0 0 20px var(--orange);
+      transition: width 0.4s ease;
+    }
+    
+    .slide-number {
+      position: absolute; bottom: 1.5vw; right: 2vw;
+      font-family: var(--font-title); font-size: 1vw; color: var(--cyan);
+      opacity: 0.6; z-index: 10; letter-spacing: 0.1em;
+    }
+
+    /* Chart Simulation */
+    .chart-bars { display: flex; align-items: flex-end; gap: 1vw; height: 8vw; margin-top: 2vh; padding-bottom: 1vh; border-bottom: 1px solid rgba(0,163,255,0.3); }
+    .bar { width: 3vw; background: linear-gradient(0deg, rgba(255,98,0,0.2), var(--orange)); border-top: 2px solid #FFF; box-shadow: 0 0 15px rgba(255,98,0,0.5); }
+    .bar:nth-child(1) { height: 40%; } .bar:nth-child(2) { height: 70%; } .bar:nth-child(3) { height: 50%; } .bar:nth-child(4) { height: 100%; }
+
+  </style>
+</head>
+<body>
+
+  <div class="deck-container" id="deck">
+    <div class="grid-bg"></div>
+    <div class="circuit-lines"></div>
+
+    <!-- Slide 1: Cover -->
+    <div class="slide cover active">
+      <div class="abstract-icon"></div>
+      
+      <div class="cover-title">Intelligent UI Helper</div>
+      <div class="cover-subtitle">Figma Plugin &amp; Web UI Tutor Workspace</div>
+      <div class="cover-zh">基于 SiliconFlow Qwen 的 Figma 插件 与 Web 画布智能导师</div>
+      
+      <div class="cover-authors">
+        DEVELOPED BY / 架构开发者<br>
+        <span>李芊儒 QIANRU LI (MC569160)</span><br>
+        <span>周纯昊 CHUNHAO ZHOU (MC569263)</span>
+      </div>
+    </div>
+
+    <!-- Slide 2: Project Architecture -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Project Architecture</h2>
+        <span class="zh-title">/ 系统架构双轨设计</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area grid-2">
+        <div class="glass-card">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Track A: Figma Plugin <span class="zh">Figma 插件端</span>
+          </h3>
+          <ul>
+            <li>
+              <span class="en-text">Powered by <span class="highlight">Qwen</span> on SiliconFlow.</span>
+              <span class="zh-text">基于硅基流动平台调用 Qwen 大模型。</span>
+            </li>
+            <li>
+              <span class="en-text">Main thread (<code style="color: var(--orange);">code.js</code>) bypasses iframe CORS limits.</span>
+              <span class="zh-text">主线程发起网络请求，完美绕过 iframe CORS 跨域限制。</span>
+            </li>
+            <li>
+              <span class="en-text">Directly exports selected layers as Base64 PNG.</span>
+              <span class="zh-text">自动提取并转换选中图层为 Base64 PNG 格式。</span>
+            </li>
+            <li>
+              <span class="en-text">Supports full bilingual UI (Chinese / English).</span>
+              <span class="zh-text">支持全局中英双语界面一键切换。</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="glass-card">
+          <h3>
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Track B: Web App <span class="zh">Web 画布端</span>
+          </h3>
+          <ul>
+            <li>
+              <span class="en-text"><span class="highlight">Vite + React + Konva + Express</span> stack.</span>
+              <span class="zh-text">基于 Vite, React 与 Konva 的现代全栈架构。</span>
+            </li>
+            <li>
+              <span class="en-text">Backend proxies <span class="highlight">xAI Grok</span> for structured generation.</span>
+              <span class="zh-text">Express 后端代理 xAI Grok，严格输出结构化 JSON 布局。</span>
+            </li>
+            <li>
+              <span class="en-text">Renders editable components on a digital canvas.</span>
+              <span class="zh-text">在数字画布上动态渲染 UI 组件与导师建议面板。</span>
+            </li>
+            <li>
+              <span class="en-text">Operates independently from Figma plugin keys.</span>
+              <span class="zh-text">环境独立，与 Figma 插件端的 API Key 配置互不干扰。</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Features -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Core Features</h2>
+        <span class="zh-title">/ 核心功能特性</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area grid-2 uneven">
+        <div>
+          <div class="glass-card" style="padding: 1.2vw 2vw;">
+            <h3>💬 Chat <span class="zh">设计问答</span></h3>
+            <span class="en-text">UI/UX mentor-style Q&A utilizing Qwen models.</span>
+            <span class="zh-text">调用 Qwen 对话模型，提供 UI/UX 导师风格的交互式问答。</span>
+          </div>
+          <div class="glass-card" style="padding: 1.2vw 2vw;">
+            <h3>🎨 Text-to-Image <span class="zh">文生图</span></h3>
+            <span class="en-text">Direct integration with <code>/v1/images/generations</code> API.</span>
+            <span class="zh-text">无缝对接文生图接口，支持一键生成参考视觉稿。</span>
+          </div>
+          <div class="glass-card" style="padding: 1.2vw 2vw;">
+            <h3>🖼️ Image Edit <span class="zh">图生图与编辑</span></h3>
+            <span class="en-text">Base64 PNG payload execution directly from Figma.</span>
+            <span class="zh-text">读取当前设计图层作为参考图，执行高精度图生图与局部编辑。</span>
+          </div>
+        </div>
+        <div class="glass-card" style="display:flex; flex-direction:column; justify-content:center;">
+          <h3 style="color: var(--cyan);">System Utilization <span class="zh">/ 资源监控</span></h3>
+          <div class="chart-bars">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          </div>
+          <p style="margin-top: 1vh; font-size: 0.9vw; color: rgba(255,255,255,0.6);">Real-time LLM metric visualization<br>实时流式大模型调用监测</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 4: LLM Configuration -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>LLM Configuration</h2>
+        <span class="zh-title">/ SiliconFlow 模型参数配置</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area">
+        <div class="glass-card">
+          <h3>Base Endpoint <span class="zh">基础接口 URL</span></h3>
+          <pre>https://api.siliconflow.cn/v1/chat/completions</pre>
+          <span class="zh-text" style="color:#888; font-size: 0.9vw;">* 对话、文生图与图生图接口均可由该 Base URL 动态推导解析。</span>
+        </div>
+
+        <div class="glass-card" style="margin-top: 2vh;">
+          <h3>Target Model IDs <span class="zh">常用模型 ID 清单</span></h3>
+          <table>
+            <thead>
+              <tr><th>Task Role <span class="zh">/ 任务</span></th><th>Model Identifier <span class="zh">/ 模型标识</span></th><th>Function <span class="zh">/ 说明</span></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Chat <span class="zh-text" style="display:inline; margin-left:0.5vw;">对话</span></td>
+                <td style="color: var(--orange);">Qwen/Qwen2.5-7B-Instruct</td>
+                <td>Mentor Q&A <span class="zh-text" style="display:inline; margin-left:0.5vw;">纯文本对话导师</span></td>
+              </tr>
+              <tr>
+                <td>T2I <span class="zh-text" style="display:inline; margin-left:0.5vw;">生图</span></td>
+                <td style="color: var(--orange);">Qwen/Qwen-Image</td>
+                <td>Text to Image <span class="zh-text" style="display:inline; margin-left:0.5vw;">文生图生成</span></td>
+              </tr>
+              <tr>
+                <td>I2I <span class="zh-text" style="display:inline; margin-left:0.5vw;">编辑</span></td>
+                <td style="color: var(--orange);">Qwen/Qwen-Image-Edit-2509</td>
+                <td>Image Edit <span class="zh-text" style="display:inline; margin-left:0.5vw;">图层修改与编辑</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Quick Start (Figma) -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Figma Integration</h2>
+        <span class="zh-title">/ 插件极速部署指引</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area grid-2">
+        <div class="glass-card">
+          <h3>Initialization Sequence <span class="zh">安装初始化</span></h3>
+          <ol style="list-style: decimal; margin-left: 2vw; margin-top: 2vh;">
+            <li style="margin-bottom: 2vh;">
+              <span class="en-text">Open Figma &rarr; Plugins &rarr; Development &rarr; <span class="highlight">Import plugin from manifest...</span></span>
+              <span class="zh-text">打开 Figma 菜单 &rarr; 插件 &rarr; 开发 &rarr; 从清单导入插件...</span>
+            </li>
+            <li style="margin-bottom: 2vh;">
+              <span class="en-text">Navigate to and select <code>figma-ui-tutor/manifest.json</code></span>
+              <span class="zh-text">在本地目录中选择并导入 manifest 配置文件</span>
+            </li>
+            <li style="margin-bottom: 2vh;">
+              <span class="en-text">Run Plugin &rarr; access <strong>Settings</strong> &rarr; Input SiliconFlow API Key</span>
+              <span class="zh-text">运行插件 &rarr; 点击「设置」 &rarr; 填入你的 SiliconFlow 密钥</span>
+            </li>
+            <li style="margin-bottom: 2vh;">
+              <span class="en-text">Code modification: Plugins &rarr; Development &rarr; <span class="highlight">Reload</span></span>
+              <span class="zh-text">若修改了代码，需点击「重新加载」生效</span>
+            </li>
+          </ol>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:center;">
+          <div style="width: 18vw; height: 18vw; border: 2px dashed var(--cyan); border-radius: 50%; display:flex; align-items:center; justify-content:center; box-shadow: inset 0 0 40px rgba(0,163,255,0.2);">
+            <div style="font-family: var(--font-title); color: var(--orange); font-size: 2vw; text-shadow: 0 0 10px var(--orange); text-align:center; line-height: 1.2;">SYSTEM<br>READY<br><span style="font-family: var(--font-body); font-size:1vw; color:var(--cyan); font-weight: 300;">系统就绪</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Quick Start (Web) -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Web App Deployment</h2>
+        <span class="zh-title">/ Web 独立应用部署</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area">
+        <div class="glass-card">
+          <h3>Environment Setup <span class="zh">环境构建 (Node 18+)</span></h3>
+          <pre>
+> cd Intelligent-UI-Helper
+> npm install
+
+# Initialize environment variables (xAI Grok config)
+# 复制环境变量模板并填入 Grok 密钥
+> copy .env.example .env   
+
+# Launch dual-server development environment
+# 一键并发启动 Vite 前端与 Express 后端代理
+> npm run dev</pre>
+        </div>
+        
+        <div class="grid-2" style="margin-top: 2vh;">
+          <div class="glass-card">
+            <h3 style="color: #FFF;">Frontend Port <span class="zh" style="color: #A0D8FF;">前端服务</span></h3>
+            <p style="font-family: var(--font-title); font-size: 1.8vw; color: var(--cyan);">http://localhost:5173</p>
+            <span class="zh-text" style="color: #888;">开发热更新服务器，请求通过 /api/* 代理至后端</span>
+          </div>
+          <div class="glass-card">
+            <h3 style="color: #FFF;">Backend API Port <span class="zh" style="color: #A0D8FF;">后端网关</span></h3>
+            <p style="font-family: var(--font-title); font-size: 1.8vw; color: var(--orange);">http://localhost:8787</p>
+            <span class="zh-text" style="color: #888;">Express 承载的 Grok / xAI 请求代理网关</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Usage Examples -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Operational Scenarios</h2>
+        <span class="zh-title">/ 核心应用场景与示例</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area">
+        <div class="grid-2">
+          <div class="glass-card">
+            <h3>💬 Figma Chat <span class="zh">智能对话</span></h3>
+            <p style="color: var(--text-main);"><em>"Recommend an eye-friendly dark palette for a dashboard."</em></p>
+            <span class="zh-text" style="color: var(--orange); margin-top: 1vh;">“给仪表盘推荐一套护眼的深色配色。”</span>
+          </div>
+          <div class="glass-card">
+            <h3>🎨 Figma T2I <span class="zh">文生图预览</span></h3>
+            <p style="color: var(--text-main);"><em>"Minimal mobile settings screen, light mode."</em></p>
+            <span class="zh-text" style="color: var(--orange); margin-top: 1vh;">“简洁的移动端设置页，浅色模式。”</span>
+          </div>
+          <div class="glass-card">
+            <h3>🖼️ Figma I2I <span class="zh">提取编辑</span></h3>
+            <p style="color: var(--text-main);">Select frame &rarr; Extract layer &rarr; <em>"Change background to snowy mountains."</em></p>
+            <span class="zh-text" style="color: var(--orange); margin-top: 1vh;">选中对应图层 &rarr; 点击「提取选中图层」 &rarr; 输入 “把背景换成雪山。”</span>
+          </div>
+          <div class="glass-card">
+            <h3>🌐 Web Studio <span class="zh">Web 结构化生成</span></h3>
+            <p style="color: var(--text-main);">Fill form on left panel &rarr; <span class="highlight">Generate</span> &rarr; Inspect interactive Konva Canvas / JSON / Tutor output.</p>
+            <span class="zh-text" style="color: var(--orange); margin-top: 1vh;">左侧填表单需求 &rarr; 点击「生成」 &rarr; 右侧查看画布布局、审查代码与导师评语。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Directory Structure -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>System Architecture</h2>
+        <span class="zh-title">/ 工程目录解析</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area">
+        <div class="glass-card">
+          <pre style="font-size: 1vw; line-height: 1.5; color: #E0F2FF;">
+Intelligent-UI-Helper/
+├── package.json              <span style="color:#888;"># Web scripts, React + Express deps (前端及服务依赖)</span>
+├── server/                   <span style="color:#888;"># Express API with Grok client (代理调用后端)</span>
+├── src/                      <span style="color:#888;"># React + Konva UI frontend (Web端视图层)</span>
+├── shared/                   <span style="color:#888;"># Zod schemas & prompts (前后端共用的校验及提示词)</span>
+├── figma-ui-tutor/
+│   ├── manifest.json         <span style="color:#888;"># Figma plugin manifest (插件注册清单)</span>
+│   ├── code.js               <span style="color:#888;"># Main thread: fetch, export PNG (主线程逻辑)</span>
+│   └── ui-v3.html            <span style="color:#888;"># Plugin UI + SiliconFlow / Qwen logic (插件交互页面)</span>
+└── README.md                 <span style="color:#888;"># Documentation (系统技术说明文档)</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Tech Stack -->
+    <div class="slide">
+      <div class="slide-header">
+        <h2>Technology Stack</h2>
+        <span class="zh-title">/ 全栈核心技术依赖</span>
+        <div class="header-line"></div>
+      </div>
+      <div class="content-area grid-2">
+        <div class="glass-card">
+          <h3 style="color: var(--cyan);">Figma Layer <span class="zh">插件层</span></h3>
+          <ul>
+            <li><span class="en-text">Figma Plugin API &amp; <code>figma.base64Encode</code></span><span class="zh-text">插件 SDK 与内部转码工具</span></li>
+            <li><span class="en-text">Main thread direct <code>fetch</code></span><span class="zh-text">主线程沙箱网络穿透请求</span></li>
+            <li><span class="en-text">HTML + Tailwind CDN + Marked</span><span class="zh-text">原生轻量级流式 Markdown 渲染</span></li>
+          </ul>
+        </div>
+        <div class="glass-card">
+          <h3 style="color: var(--cyan);">Web Layer <span class="zh">应用层</span></h3>
+          <ul>
+            <li><span class="en-text">Vite, React 18, TypeScript</span><span class="zh-text">现代工程化前端基座</span></li>
+            <li><span class="en-text">Tailwind CSS, React-Konva</span><span class="zh-text">可交互的高性能数据画板</span></li>
+            <li><span class="en-text">Express, Zod, dotenv</span><span class="zh-text">类型安全的 Node.js 中间件代理</span></li>
+          </ul>
+        </div>
+        <div class="glass-card" style="grid-column: span 2;">
+          <h3 style="color: var(--orange);">AI / LLM Integration <span class="zh">人工智能集成方案</span></h3>
+          <div style="display: flex; gap: 4vw; margin-top: 2vh; padding-left: 2vw;">
+            <div>
+              <p style="font-weight: 600; color: #FFF;">Figma Plugin <span style="color:#888; font-weight:300; font-size:0.9vw;">(设计辅助)</span></p>
+              <p>SiliconFlow &middot; Qwen Models</p>
+            </div>
+            <div>
+              <p style="font-weight: 600; color: #FFF;">Web Server <span style="color:#888; font-weight:300; font-size:0.9vw;">(结构输出)</span></p>
+              <p>xAI Grok API via Express proxy</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Conclusion & Authors -->
+    <div class="slide cover">
+      <div class="cover-subtitle" style="font-size: 2.5vw; margin-bottom: 2vh; color: var(--cyan);">SYSTEM TERMINATED</div>
+      
+      <div class="glass-card" style="width: 50vw; text-align: left; margin-bottom: 4vh; padding: 2vw 3vw;">
+        <h3 style="color: var(--orange);">Contribution &amp; License <span class="zh">贡献与开源许可</span></h3>
+        <p style="font-size: 1vw;">
+          Issues &amp; PRs welcome. Test Figma in Development mode.<br>Run <code>npm run lint</code> before web commits.
+        </p>
+        <span class="zh-text" style="margin-top: 1vh; font-size: 0.9vw;">欢迎提交 Issue 与 PR。插件请在开发者模式调试，Web端提交流程前需通过规范检查。</span>
+        <p style="margin-top: 2vh; font-size: 1vw;">Licensed under <span class="highlight">MIT</span> <span class="zh-text" style="display:inline; margin-left:1vw;">采用 MIT 协议开源</span></p>
+      </div>
+
+      <div class="cover-authors" style="border-color: var(--orange); background: rgba(255,98,0,0.05); text-align: center;">
+        SYSTEM ARCHITECTS / 系统架构与开发<br>
+        <span style="color: #FFF; font-size: 1.5vw; font-weight: 600;">李芊儒 QIANRU LI (MC569160)</span><br>
+        <span style="color: #FFF; font-size: 1.5vw; font-weight: 600;">周纯昊 CHUNHAO ZHOU (MC569263)</span>
+      </div>
+      
+      <p style="margin-top: 4vh; color: #888; font-family: var(--font-title); font-size: 1vw; letter-spacing: 0.2em;">HAPPY DESIGNING &middot; 设计愉快 🎨</p>
+    </div>
+
+    <!-- UI Overlays -->
+    <div class="slide-number" id="slideNum">01 / 10</div>
+    <div class="footer-bar">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    const slideNum = document.getElementById('slideNum');
+    let current = 0;
+    const total = slides.length;
+
+    function updateView() {
+      slides.forEach((s, i) => {
+        if (i === current) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      
+      const pct = ((current + 1) / total) * 100;
+      progressBar.style.width = pct + '%';
+      
+      slideNum.textContent = `0${current + 1}`.slice(-2) + ` / ` + `0${total}`.slice(-2);
+    }
+
+    function next() { if (current < total - 1) { current++; updateView(); } }
+    function prev() { if (current > 0) { current--; updateView(); } }
+
+    document.addEventListener('keydown', (e) => {
+      if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) next();
+      if (['ArrowLeft', 'PageUp'].includes(e.key)) prev();
+    });
+
+    document.getElementById('deck').addEventListener('click', (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      if (clickX > rect.width / 2) next();
+      else prev();
+    });
+
+    // Initialize
+    updateView();
+  </script>
+</body>
+</html>

@@ -11,6 +11,46 @@
 
 ---
 
+## 🎨 Intelligent UI Helper — Intelligent UI Assistant
+
+**Let AI Truly Live Inside the Designer’s Workflow**
+
+We built **Intelligent UI Helper** to solve the three biggest pain points designers face every day:
+
+**1. Breaking Tool Barriers**  
+Traditional UI design forces constant switching between Figma and external AI websites, with endless uploading and downloading. We let AI live directly inside Figma: the main thread calls SiliconFlow Qwen to instantly extract selected layers as Base64 PNG, enabling seamless mentor-style chat, Text-to-Image, and Image-to-Image generation — zero interruption, pure creative flow.
+
+**2. Creating a Real Intelligent UI Mentor**  
+Most AI tools only generate images. We go further: we teach design. The Figma plugin uses Qwen for professional UI/UX mentor-style Q&A, while the Web canvas leverages Grok to output structured JSON that powers a fully editable Konva canvas. Beginners grow fast; professionals get powerful inspiration and real-time feedback.
+
+**3. Building a Flexible Dual-Track System**  
+Figma plugin for rapid validation in real projects. Standalone Web app (Vite + React + Konva + Express) for deep exploration and team collaboration. We created a clean **Track A (Figma Plugin) + Track B (Web Studio)** architecture with full bilingual (Chinese/English) support and MIT open-source licensing — so every designer can choose the environment that fits their workflow.
+
+> ⭐ Welcome Stars & PRs! Let’s turn AI into every designer’s true creative partner.  
+> `Figma Plugin` + `Web Studio` dual environment · Powered by SiliconFlow Qwen + xAI Grok
+
+---
+
+## 🎨 Intelligent UI Helper — 智能 UI 导师
+
+**让 AI 真正融入设计师的工作流**
+
+我们构建 **Intelligent UI Helper** 是为了解决设计师每天面临的三大痛点：
+
+**1. 打破工具壁垒**  
+传统的 UI 设计总是迫使设计师在 Figma 和外部 AI 网站之间频繁切换，伴随着无尽的上传与下载。我们让 AI 直接驻留在 Figma 内部：主线程调用硅基流动（SiliconFlow）的 Qwen 模型，瞬间将选中的图层提取为 Base64 PNG，从而实现无缝的导师式对话、文生图和图生图生成——零打断，纯粹的创作心流。
+
+**2. 打造真正的智能 UI 导师**  
+大多数 AI 工具只能生成图像。我们走得更远：我们教授设计。Figma 插件使用 Qwen 提供专业的 UI/UX 导师式问答，而 Web 画布端则利用 Grok 输出结构化 JSON，驱动完全可编辑的 Konva 画板。让新手快速成长，让专业人士获得强大的灵感与实时反馈。
+
+**3. 构建灵活的双轨系统**  
+Figma 插件端用于在真实项目中快速验证。独立的 Web 应用（Vite + React + Konva + Express）用于深度探索与团队协作。我们打造了纯粹的 **Track A（Figma 插件） + Track B（Web 画布）** 架构，并提供全面的中英双语支持以及 MIT 开源许可——因此每位设计师都可以选择最适合自己工作流的环境。
+
+> ⭐ 欢迎 Star 与 PR！让我们将 AI 变成每位设计师真正的创作伙伴。  
+> `Figma 插件` + `Web 画布` 双环境 · 强力驱动：硅基流动 Qwen + xAI Grok
+
+---
+
 ## 📖 Introduction / 简介
 
 ### Figma plugin (`figma-ui-tutor/`) · Figma 插件
